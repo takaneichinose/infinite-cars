@@ -158,7 +158,7 @@ export default class GameScene extends Phaser.Scene {
 		const text = "Score: 0px";
 		
 		this.score = Methods.addText(this, 16, 16, text, "16px")
-			.setDepth(height)
+			.setDepth(height + 100)
 			.setScrollFactor(0);
 		
 		Methods.log("Score initialized");
