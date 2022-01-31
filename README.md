@@ -35,3 +35,5 @@ If you feel that the background sound effect is noisy, you may mute it (Located 
 [Luckiest Guy](https://fonts.googleapis.com/css2?family=Luckiest+Guy) - Font used for the texts.
 
 [AAP64](https://lospec.com/palette-list/aap-64) - The color palette used for the images and the UI.
+
+[Codepen](https://codepen.io/) - As a text editor (Or IDE) for development.
