@@ -1,16 +1,9 @@
-import * as Phaser from "phaser";
+import * as Constants from "./includes/Constants.js";
 
-import * as Constants from "./includes/Constants";
+import LoadingScene from "./scenes/LoadingScene.js";
+import MainScene from "./scenes/MainScene.js";
+import GameScene from "./scenes/GameScene.js";
 
-import LoadingScene from "./scenes/LoadingScene";
-import MainScene from "./scenes/MainScene";
-import InstructionsScene from "./scenes/InstructionsScene";
-import GameScene from "./scenes/GameScene";
-import GameOverScene from "./scenes/GameOverScene";
-
-/**
- * Phaser settings
- */
 new Phaser.Game({
 	type: Phaser.AUTO,
 	parent: "infinite-cars",
@@ -35,14 +28,9 @@ new Phaser.Game({
 			height: Constants.MAX_SCREEN_HEIGHT,
 		},
 	},
-	dom: {
-		createContainer: true,
-	},
 	scene: [
 		LoadingScene,
 		MainScene,
-		InstructionsScene,
 		GameScene,
-		GameOverScene,
 	],
 });
