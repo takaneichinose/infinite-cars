@@ -19,7 +19,7 @@ export default class MainScene extends Phaser.Scene {
 			.setColor(color)
 			.setStroke(stroke, 8);
 		
-		Methods.addText(this, Constants.SCREEN_WIDTH / 2, 176, "Infinite Cars", "24px")
+		Methods.addText(this, Constants.SCREEN_WIDTH / 2, 176, "Car race game", "24px")
 			.setDepth(Constants.SCREEN_HEIGHT)
 			.setOrigin(0.5)
 			.setScrollFactor(0)
@@ -43,6 +43,23 @@ export default class MainScene extends Phaser.Scene {
 		});
 	}
 	
+	addHighScore() {
+		Methods.log("Fetching the high score...");
+		
+		if (Constants.IS_DEBUG === true) {
+			localStorage.setItem("InfiniteCarsHighScore", 0);
+		}
+		
+		const height = Constants.SCREEN_HEIGHT;
+		const highScore = localStorage.getItem("InfiniteCarsHighScore");
+		const text = `High score: ${highScore !== null ? highScore : ""}`;
+		
+		Methods.addText(this, 16, 16, text, "16px")
+			.setDepth(height + 100);
+		
+		Methods.log("Score initialized");
+	}
+	
 	initialize() {
 		Methods.createMap(this);
 		Methods.placeCharacter(this, false);
@@ -51,6 +68,7 @@ export default class MainScene extends Phaser.Scene {
 		
 		this.addBanner();
 		this.addStartButton();
+		this.addHighScore();
 	}
 	
 	create() {

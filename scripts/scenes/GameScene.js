@@ -82,7 +82,7 @@ export default class GameScene extends Phaser.Scene {
 	addObjects() {
 		Methods.log("Adding objects...");
 		
-		this.roadCones = this.physics.add.group();
+		this.roadCones = this.physics.add.staticGroup();
 		this.computerCars = this.physics.add.group();
 		
 		this.computerCars.defaults = {};
@@ -116,10 +116,48 @@ export default class GameScene extends Phaser.Scene {
 		});
 	}
 	
+	setHighScore() {
+		Methods.log("Setting the high score...");
+		
+		const score = this.score.getData("value");
+		const width = Constants.SCREEN_WIDTH;
+		const height = Constants.SCREEN_HEIGHT;
+		
+		let highScore = localStorage.getItem("InfiniteCarsHighScore");
+		highScore = parseFloat(highScore);
+		
+		if (highScore > score) {
+			Methods.log(`The high score is ${highScore}`);
+			
+			return;
+		}
+		
+		localStorage.setItem("InfiniteCarsHighScore", score);
+		
+		Methods.log(`The high score is now set to ${highScore}`);
+	}
+	
 	setGameOver() {
 		Methods.log("You collided with other object!");
 		
 		this.physics.world.pause();
+		
+		this.setHighScore();
+		
+		const width = Constants.SCREEN_WIDTH;
+		const height = Constants.SCREEN_HEIGHT;
+		
+		Methods.addText(this, width / 2, height / 2, "Crashed!", "24px")
+			.setDepth(height + 100)
+			.setOrigin(0.5, 0.5)
+			.setScrollFactor(0);
+		
+		const highScore = localStorage.getItem("InfiniteCarsHighScore");
+		
+		Methods.addText(this, width / 2, (height / 2) + 32, `High score: ${highScore}`, "16px")
+			.setDepth(height + 100)
+			.setOrigin(0.5, 0.5)
+			.setScrollFactor(0);
 		
 		Methods.log("Physics world is now paused");
 		
@@ -154,12 +192,13 @@ export default class GameScene extends Phaser.Scene {
 		Methods.log("Initializing score board...");
 		
 		const height = Constants.SCREEN_HEIGHT;
-		const speed = Constants.CHARACTER_SPEED;
-		const text = "Score: 0px";
+		const text = "Score: 0";
 		
 		this.score = Methods.addText(this, 16, 16, text, "16px")
 			.setDepth(height + 100)
-			.setScrollFactor(0);
+			.setScrollFactor(0)
+			.setDataEnabled()
+			.setData("value", 0);
 		
 		Methods.log("Score initialized");
   }
@@ -248,7 +287,7 @@ export default class GameScene extends Phaser.Scene {
 		this.addObjects();
 		this.setCollisions();
 		
-		this.character.setVelocityY(Constants.CHARACTER_SPEED * -1);
+		this.character.setVelocityY(-Constants.CHARACTER_SPEED);
 		
 		this.initializeScore();
 		this.setStarter();
@@ -300,7 +339,7 @@ export default class GameScene extends Phaser.Scene {
 		const x = this.getRoadBoundary();
 		
 		const roadCone =
-			this.physics.add.sprite(x, this.lowestMapY, "road-cone")
+			this.physics.add.staticImage(x, this.lowestMapY, "road-cone")
 				.setDepth(Constants.SCREEN_HEIGHT);
 		
 		this.roadCones.add(roadCone);
@@ -346,7 +385,8 @@ export default class GameScene extends Phaser.Scene {
 				.refreshBody()
 				.setDataEnabled()
 				.setData("isFast", isFast)
-				.setVelocityY(speed * -1);
+				.setData("velocity", speed * -1)
+				.setVelocityY(-(speed));
 		
 		this.computerCars.add(computerCar);
 	}
@@ -417,6 +457,7 @@ export default class GameScene extends Phaser.Scene {
 			
 			if (isDodge === false) {
 				computerCar.setVelocityX(0);
+				computerCar.setVelocityY(computerCar.data.list.velocity);
 				
 				continue;
 			}
@@ -445,9 +486,11 @@ export default class GameScene extends Phaser.Scene {
 	setScore() {
 		const height = Constants.SCREEN_HEIGHT;
 		const score = Math.abs(this.character.y - (height * 0.75));
-		const text = `Score: ${Math.round(score * 100) / 100}px`;
+		const scoreValue = Math.round(score * 100) / 100;
+		const text = `Score: ${scoreValue}`;
 		
 		this.score.setText(text);
+		this.score.setData("value", scoreValue);
 	}
 	
 	setOvertake() {
@@ -459,6 +502,10 @@ export default class GameScene extends Phaser.Scene {
 	}
 	
 	updateWorld() {
+		if (this.physics.world.isPaused === true) {
+			return;
+		}
+		
 		this.repositionBoundary();
 		
 		const isAddRoad = this.addRoad();

@@ -41,8 +41,8 @@ export const INITIAL_CHARACTER_Y = SCREEN_HEIGHT * 0.75;
 
 export const CHARACTER_SPEED = 192;
 
-export const ROAD_CONE_RATE = 5;
-export const COMPUTER_CAR_RATE = 5;
+export const ROAD_CONE_RATE = 6.5;
+export const COMPUTER_CAR_RATE = 6.5;
 
 export const COMPUTER_SLOW_SPEED_MIN = 96;
 export const COMPUTER_SLOW_SPEED_MAX = 144;
@@ -51,7 +51,7 @@ export const COMPUTER_FAST_SPEED_MIN = 256;
 export const COMPUTER_FAST_SPEED_MAX = 320;
 
 export const COMPUTER_DODGE_DISTANCE = 240;
-export const COMPUTER_DODGE_SPEED = 32;
+export const COMPUTER_DODGE_SPEED = 48;
 
 export const STOP_LIGHT_WIDTH = 96;
 export const STOP_LIGHT_HEIGHT = 240;
