@@ -46,18 +46,23 @@ export default class MainScene extends Phaser.Scene {
 	addHighScore() {
 		Methods.log("Fetching the high score...");
 		
-		if (Constants.IS_DEBUG === true) {
-			localStorage.setItem("InfiniteCarsHighScore", 0);
+		try {
+			if (Constants.IS_DEBUG === true) {
+				localStorage.setItem("InfiniteCarsHighScore", 0);
+			}
+
+			const height = Constants.SCREEN_HEIGHT;
+			const highScore = localStorage.getItem("InfiniteCarsHighScore");
+			const text = `High score: ${highScore !== null ? highScore : ""}`;
+
+			Methods.addText(this, 16, 16, text, "16px")
+				.setDepth(height + 100);
+
+			Methods.log("Score initialized");
 		}
-		
-		const height = Constants.SCREEN_HEIGHT;
-		const highScore = localStorage.getItem("InfiniteCarsHighScore");
-		const text = `High score: ${highScore !== null ? highScore : ""}`;
-		
-		Methods.addText(this, 16, 16, text, "16px")
-			.setDepth(height + 100);
-		
-		Methods.log("Score initialized");
+		catch (e) {
+			Methods.log("Failed to get highscore data", e);
+		}
 	}
 	
 	initialize() {

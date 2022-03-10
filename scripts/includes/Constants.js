@@ -72,4 +72,4 @@ export const FONT_SETTINGS = {
 export const SOUND_CONTROL_WIDTH = 16;
 export const SOUND_CONTROL_HEIGHT = 16;
 
-export const IS_DEBUG = false;
+export const IS_DEBUG = true;

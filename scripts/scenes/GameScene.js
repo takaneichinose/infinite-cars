@@ -123,18 +123,23 @@ export default class GameScene extends Phaser.Scene {
 		const width = Constants.SCREEN_WIDTH;
 		const height = Constants.SCREEN_HEIGHT;
 		
-		let highScore = localStorage.getItem("InfiniteCarsHighScore");
-		highScore = parseFloat(highScore);
-		
-		if (highScore > score) {
-			Methods.log(`The high score is ${highScore}`);
-			
-			return;
+		try {
+			let highScore = localStorage.getItem("InfiniteCarsHighScore");
+			highScore = parseFloat(highScore);
+
+			if (highScore > score) {
+				Methods.log(`The high score is ${highScore}`);
+
+				return;
+			}
+
+			localStorage.setItem("InfiniteCarsHighScore", score);
+
+			Methods.log(`The high score is now set to ${highScore}`);
 		}
-		
-		localStorage.setItem("InfiniteCarsHighScore", score);
-		
-		Methods.log(`The high score is now set to ${highScore}`);
+		catch (e) {
+			Methods.log("Failed to get highscore data", e);
+		}
 	}
 	
 	setGameOver() {
@@ -152,12 +157,18 @@ export default class GameScene extends Phaser.Scene {
 			.setOrigin(0.5, 0.5)
 			.setScrollFactor(0);
 		
-		const highScore = localStorage.getItem("InfiniteCarsHighScore");
-		
-		Methods.addText(this, width / 2, (height / 2) + 32, `High score: ${highScore}`, "16px")
-			.setDepth(height + 100)
-			.setOrigin(0.5, 0.5)
-			.setScrollFactor(0);
+		try {
+			const highScore = localStorage.getItem("InfiniteCarsHighScore");
+			const highScoreText = `High score: ${highScore}`;
+
+			Methods.addText(this, width / 2, (height / 2) + 32, highScoreText, "16px")
+				.setDepth(height + 100)
+				.setOrigin(0.5, 0.5)
+				.setScrollFactor(0);
+		}
+		catch (e) {
+			Methods.log("Failed to get highscore data", e);
+		}
 		
 		Methods.log("Physics world is now paused");
 		
